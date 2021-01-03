@@ -38,9 +38,8 @@ class User(db.Model):
             token = jwt.encode(
                 payload,
                 key,
-                algorithm='HS256'
-            )
-            print(token)
+                'HS256'
+            ).decode("utf-8")
             return token
         except Exception as e:
             return e
@@ -49,9 +48,7 @@ class User(db.Model):
     def decode_auth_token(auth_token):
         
         try:
-            print(auth_token)
-            payload = jwt.decode(auth_token, key, algorithm='HS256')
-            print("payload : ",payload)
+            payload = jwt.decode(auth_token, key, 'HS256')
             is_blacklisted_token = BlacklistToken.check_blacklist(auth_token)
             if is_blacklisted_token:
                 return 'Token blacklisted. Please log in again.'
