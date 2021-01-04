@@ -22,6 +22,7 @@ class UserList(Resource):
     @api.expect(_user, validate=True)
     def post(self):
         data = request.json
+        print(data)
         return save_new_user(data=data)
 
 
