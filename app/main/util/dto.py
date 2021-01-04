@@ -16,3 +16,15 @@ class AuthDto:
         'email': fields.String(required=True, description='The email address'),
         'password': fields.String(required=True, description='The user password '),
     })
+
+
+
+class DiaryDto:
+    api = Namespace('diary',description='diary related operations')
+    diary = api.model('diary',{
+        'context': fields.String(description='diary context'),
+        'emotion': fields.Integer(description='diary emotion'),
+        'value': fields.Float(description='diary value of emotion'),
+        'created_at' : fields.DateTime(description='diary created at')
+    })
+    
