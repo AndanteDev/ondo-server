@@ -17,6 +17,7 @@ class DiaryList(Resource):
     def get(self):
         return get_all_diaries(request=request)
 
+    @token_required
     @api.response(201, 'Diary successfully created')
     @api.doc('create a new diary')
     @api.expect(_diary, validate=True)

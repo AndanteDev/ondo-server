@@ -10,16 +10,16 @@ def save_new_diary(request):
     resp = Auth.get_user_id_with_token(request)
 
     new_diary = Diary (
-        context = data['context'],
-        user_id = resp,
-        emotion = data['emotion'],
-        value = data['value'],
-        created_at = datetime.datetime.utcnow
+        user_id=resp,
+        context=data['context'],
+        emotion=data['emotion'],
+        value=data['value']
     )
     
     try:
         save_changes(new_diary)
-    except e:
+        print(new_diary)
+    except Exception as e:
         response_object = {
             'status': 'fail',
             'message': e
@@ -28,7 +28,7 @@ def save_new_diary(request):
 
     response_object = {
         'status': 'success',
-        'message':'Successfully registered.'
+        'message':'Successfully created.'
     }
     return response_object, 201
 
@@ -53,5 +53,8 @@ def get_a_diary(request,id):
 
 
 def save_changes(data):
-    db.session.add(data)
-    db.session.commit()
+    try:
+        db.session.add(data)
+        db.session.commit()
+    except Exception as e:
+        print(e)
