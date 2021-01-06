@@ -3,6 +3,7 @@ from flask_restplus import Namespace, fields
 class UserDto:
     api = Namespace('user',description='user related operations')
     user = api.model('user', {
+        'id':fields.Integer(description='user id'),
         'email':fields.String(required=True,description='user email address'),
         'username':fields.String(required=True,description='user username'),
         'password':fields.String(required=True, description='user password'),
@@ -22,6 +23,8 @@ class AuthDto:
 class DiaryDto:
     api = Namespace('diary',description='diary related operations')
     diary = api.model('diary',{
+        'id':fields.String(description='diary id'),
+        'user_id':fields.Integer(description='diary owner id'),
         'context': fields.String(description='diary context'),
         'emotion': fields.Integer(description='diary emotion'),
         'value': fields.Float(description='diary value of emotion'),
