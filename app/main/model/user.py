@@ -39,7 +39,7 @@ class User(db.Model):
                 payload,
                 key,
                 'HS256'
-            ).decode("utf-8")
+            )
             return token
         except Exception as e:
             return e
