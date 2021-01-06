@@ -36,20 +36,20 @@ def save_new_diary(request):
 
 def get_all_diaries(request):
     resp = Auth.get_user_id_with_token(request)
-    return Diary.query.filter_by(user_id=resp)
+    return Diary.query.filter_by(user_id=resp).all()
 
 
 def get_a_diary(request,id):
 
     diary = Diary.query.filter_by(id=id).first()
     if diary.user_id != Auth.get_user_id_with_token(request):
-        response_object = {
+        response = {
             'status':'fail',
             'message': "You don't have permission on this object"
         }
-        return response_object
+        return response,403
 
-    return diary
+    return diary,200
 
 
 def save_changes(data):
