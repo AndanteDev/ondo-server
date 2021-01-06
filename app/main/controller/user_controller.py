@@ -2,7 +2,7 @@ from flask import request
 from flask_restplus import Resource
 
 from ..util.dto import UserDto
-from ..service.user_service import save_new_user,get_all_users,get_a_user
+from ..service.user_service import save_new_user,get_all_users,get_a_user,get_my_user
 
 from app.main.util.decorator import token_required
 
@@ -38,3 +38,11 @@ class User(Resource):
             api.abort(404)
         else:
             return user
+
+@api.route('/my')
+class MyProfile(Resource):
+    @token_required
+    @api.doc('get my profile')
+    @api.marshal_with(_user)
+    def get (self):
+        return get_my_user(request)

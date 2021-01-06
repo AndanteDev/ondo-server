@@ -3,6 +3,7 @@ import datetime
 
 from app.main import db
 from app.main.model.user import User
+from .auth_helper import Auth
 
 
 def save_new_user(data):
@@ -57,3 +58,7 @@ def generate_token(user):
             'message': 'Some error occurred. Please try again.'
         }
         return response_object, 401
+
+def get_my_user(request):
+    resp = Auth.get_user_id_with_token(request)
+    return User.query.filter_by(id=resp).first()
