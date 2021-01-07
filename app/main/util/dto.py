@@ -31,3 +31,10 @@ class DiaryDto:
         'created_at' : fields.Date(description='diary created at')
     })
     
+class EmotionDto:
+    api = Namespace('emotion',description='emotion related operations')
+    emotion = api.model('emotion',{
+        'id':fields.String(description='diary id'),
+        'emotion':fields.Integer(description='diary emotion'),
+        'value':fields.Float(description='diary value')
+    })
