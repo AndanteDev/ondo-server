@@ -50,6 +50,10 @@ def get_all_diaries(request,year,month):
         start = str(year) + "-" + str(month).zfill(2) + "-01"
         end = str(year) + "-" + str(int(month)+1).zfill(2) + "-01"
         return Diary.query.filter(Diary.user_id==resp).filter(Diary.created_at.between(start,end)).all()
+    elif year != None and month == None:
+        start = str(year) +"-01-01"
+        end = str(year+1) + "-01-01"
+        return Diary.query.filter(Diary.user_id==resp).filter(Diary.created_at.between(start,end)).all()
     return Diary.query.filter_by(user_id=resp).all()
 
 
