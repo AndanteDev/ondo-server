@@ -4,7 +4,7 @@ from app.main import db
 from app.main.model.diary import Diary
 from .auth_helper import Auth
 
-from sqlalchemy import and_,func
+
 
 
 def save_new_diary(request):
@@ -55,7 +55,7 @@ def get_all_diaries(request,year,month):
 
 def get_a_diary(request,id):
 
-    diary = Diary.query.filter_by(id=id).first()
+    diary = Diary.query.filter(Diary.id == id).first()
     if diary.user_id != Auth.get_user_id_with_token(request):
         response = {
             'status':'fail',
@@ -64,6 +64,25 @@ def get_a_diary(request,id):
         return response,403
 
     return diary,200
+
+def delete_diary(request,id):
+    resp = Auth.get_user_id_with_token(request)
+    diary = Diary.query.filter(Diary.id == id).filter(Diary.user_id == resp).first()
+    if diary:
+        db.session.delete(diary)
+        db.session.commit()
+    else:
+        response = {
+            'status':'fail',
+            'message':'This diary does not exists'
+        }
+        return response,404
+  
+    response = {
+        'status':'success',
+        'message':'Successfully delete diary'
+    }
+    return response, 200
 
 
 def save_changes(data):

@@ -2,7 +2,7 @@ from flask import request
 from flask_restplus import Resource
 
 from ..util.dto import DiaryDto
-from ..service.diary_service import save_new_diary,get_a_diary,get_all_diaries
+from ..service.diary_service import *
 
 from app.main.util.decorator import token_required
 
@@ -44,3 +44,11 @@ class Diary(Resource):
             api.abort(404)
         else:
             return diary
+
+    @token_required
+    @api.doc('modify a diary')
+    @api.marshal_with(_diary)
+    def delete (self,id):
+        return delete_diary(request,id)
+
+        
