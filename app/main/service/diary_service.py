@@ -4,38 +4,52 @@ from app.main import db
 from app.main.model.diary import Diary
 from .auth_helper import Auth
 
+from sqlalchemy import and_,func
+
 
 def save_new_diary(request):
-    data = request.json
-    resp = Auth.get_user_id_with_token(request)
 
-    new_diary = Diary (
-        user_id=resp,
-        context=data['context'],
-        emotion=data['emotion'],
-        value=data['value']
-    )
-    
-    try:
-        save_changes(new_diary)
-        print(new_diary)
-    except Exception as e:
+    resp = Auth.get_user_id_with_token(request)
+    data = request.json
+    today = datetime.datetime.today().strftime('%Y-%m-%d')
+    today_diary = Diary.query.filter(Diary.user_id==resp).filter(Diary.created_at==today).first()
+
+    if not today_diary:
+        new_diary = Diary (
+            user_id=resp,
+            context=data['context'],
+            emotion=data['emotion'],
+            value=data['value']
+        )
+        
+        try:
+            save_changes(new_diary)
+        except Exception as e:
+            response_object = {
+                'status': 'fail',
+                'message': e
+            }    
+            return response_object, 400
+
+        response_object = {
+            'status': 'success',
+            'message':'Successfully created.'
+        }
+        return response_object, 201
+    else :
         response_object = {
             'status': 'fail',
-            'message': e
-        }    
-        return response_object, 400
-
-    response_object = {
-        'status': 'success',
-        'message':'Successfully created.'
-    }
-    return response_object, 201
-
+            'message': 'Today diary already exists. Try tomorrow'
+        }
+        return response_object,409
     
 
-def get_all_diaries(request):
+def get_all_diaries(request,year,month):
     resp = Auth.get_user_id_with_token(request)
+    if year != None and month != None:
+        start = str(year) + "-" + str(month).zfill(2) + "-01"
+        end = str(year) + "-" + str(int(month)+1).zfill(2) + "-01"
+        return Diary.query.filter(Diary.user_id==resp).filter(Diary.created_at.between(start,end)).all()
     return Diary.query.filter_by(user_id=resp).all()
 
 

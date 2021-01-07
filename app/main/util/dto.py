@@ -28,6 +28,6 @@ class DiaryDto:
         'context': fields.String(description='diary context'),
         'emotion': fields.Integer(description='diary emotion'),
         'value': fields.Float(description='diary value of emotion'),
-        'created_at' : fields.DateTime(description='diary created at')
+        'created_at' : fields.Date(description='diary created at')
     })
     

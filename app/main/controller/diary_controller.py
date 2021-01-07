@@ -14,8 +14,14 @@ class DiaryList(Resource):
     @token_required
     @api.doc('list_of_my_diaries')
     @api.marshal_list_with(_diary,envelope='data')
+    @api.doc(params={'year': {'description': 'diary year',
+                                'type': 'string', 'required':False},
+                    'month': {'description': 'diary month',
+                                'type': 'string', 'required':False}})
     def get(self):
-        return get_all_diaries(request=request)
+        year = request.args.get('year')
+        month = request.args.get('month')
+        return get_all_diaries(request=request,year = year,month=month)
 
     @token_required
     @api.response(201, 'Diary successfully created')
