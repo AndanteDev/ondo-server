@@ -19,7 +19,7 @@ class Diary(db.Model):
     context = db.Column(db.Text)
     emotion = db.Column(db.Enum(Emotion))
     value = db.Column(db.Float)
-    created_at = db.Column(db.DateTime, nullable=False)
+    created_at = db.Column(db.Date, nullable=False)
 
     def __init__(self,user_id,context,emotion,value):
         self.id = str(uuid.uuid4())
@@ -27,7 +27,7 @@ class Diary(db.Model):
         self.context = context
         self.emotion = emotion
         self.value = value
-        self.created_at = datetime.datetime.utcnow()
+        self.created_at = datetime.datetime.today()
         
 
     def __repr__(self):

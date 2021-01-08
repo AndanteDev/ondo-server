@@ -2,7 +2,7 @@ from flask import request
 from flask_restplus import Resource
 
 from ..util.dto import DiaryDto
-from ..service.diary_service import save_new_diary,get_a_diary,get_all_diaries
+from ..service.diary_service import *
 
 from app.main.util.decorator import token_required
 
@@ -14,8 +14,14 @@ class DiaryList(Resource):
     @token_required
     @api.doc('list_of_my_diaries')
     @api.marshal_list_with(_diary,envelope='data')
+    @api.doc(params={'year': {'description': 'diary year',
+                                'type': 'string', 'required':False},
+                    'month': {'description': 'diary month',
+                                'type': 'string', 'required':False}})
     def get(self):
-        return get_all_diaries(request=request)
+        year = request.args.get('year')
+        month = request.args.get('month')
+        return get_all_diaries(request=request,year = year,month=month)
 
     @token_required
     @api.response(201, 'Diary successfully created')
@@ -38,3 +44,11 @@ class Diary(Resource):
             api.abort(404)
         else:
             return diary
+
+    @token_required
+    @api.doc('modify a diary')
+    @api.marshal_with(_diary)
+    def delete (self,id):
+        return delete_diary(request,id)
+
+        
