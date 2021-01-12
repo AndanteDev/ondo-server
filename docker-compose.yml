@@ -32,10 +32,6 @@ services:
       - DJANGO_DB_USERNAME=root
       - DJANGO_DB_PASSWORD=0000
       - BOILERPLATE_ENV=prod
-    ports:
-      - "5000:5000"
-    links:
-      - db
     command:
       - python 
       - manage.py 
@@ -55,5 +51,10 @@ services:
       - python
       - manage.py
       - run
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
     volumes:
       - ./:/app/
+
