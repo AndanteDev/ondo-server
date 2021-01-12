@@ -4,7 +4,6 @@ from app.main import db
 from app.main.model.diary import Diary
 from .auth_helper import Auth
 
-from ....manage import session
 
 
 def get_my_emotions(request,year,month):
