@@ -1,0 +1,60 @@
+version: '3.7'
+
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    command: --lower_case_table_names=1
+    container_name: mysql-ondo 
+    ports:
+      - "3307:3306" 
+    volumes:
+      - /Users/Shared/data/mysql-test:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=ondo
+      - MYSQL_USER=root
+      - MYSQL_ROOT_PASSWORD=0000
+      - MYSQL_PASSWORD=0000
+      - TZ=Asia/Seoul
+    command: 
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+
+  backend:
+    container_name: ondo_server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DJANGO_DEBUG=True
+      - DJANGO_DB_HOST=db
+      - DJANGO_DB_NAME=ondo
+      - DJANGO_DB_USERNAME=root
+      - DJANGO_DB_PASSWORD=0000
+      - BOILERPLATE_ENV=prod
+    command:
+      - python 
+      - manage.py 
+      - db
+      - init
+    command:
+      - python
+      - manage.py
+      - db
+      - migrate
+    command:
+      - python
+      - manage.py
+      - db
+      - upgrade
+    command:
+      - python
+      - manage.py
+      - run
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    volumes:
+      - ./:/app/
+
